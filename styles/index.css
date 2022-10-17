@@ -1,0 +1,43 @@
+.main__header {
+    background-color: red;
+    width: 100%;
+    padding: 20px;
+}
+
+.main__container {
+    display: flex;
+    flex-direction: column;
+    margin: auto 10px;
+    width: fit-content;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+}
+
+.dashboard__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.button--buy {
+    padding: 1rem 2em;
+    font-weight: 800;
+    background: teal;
+    border-radius: 10px;
+}
+
+.button--sell {
+    padding: 1rem 2rem;
+    font-weight: 800;
+    background: palevioletred;
+    border-radius: 10px;
+}

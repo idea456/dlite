@@ -1,0 +1,44 @@
+{
+    "name": "dlite",
+    "version": "1.0.0",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon server.js",
+        "build": "webpack --mode production",
+        "report": "webpack --profile --json > stats.json; webpack-bundle-analyzer ./stats.json"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/idea456/dlite.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/idea456/dlite/issues"
+    },
+    "homepage": "https://github.com/idea456/dlite#readme",
+    "devDependencies": {
+        "babel-loader": "^8.2.5",
+        "compression-webpack-plugin": "^10.0.0",
+        "css-loader": "^6.7.1",
+        "css-minimizer-webpack-plugin": "^4.2.2",
+        "html-loader": "^4.2.0",
+        "html-webpack-plugin": "^5.5.0",
+        "mini-css-extract-plugin": "^2.6.1",
+        "nodemon": "^2.0.20",
+        "style-loader": "^3.3.1",
+        "webpack": "^5.74.0",
+        "webpack-bundle-analyzer": "^4.6.1",
+        "webpack-cli": "^4.10.0",
+        "webpack-dev-server": "^4.11.1"
+    },
+    "dependencies": {
+        "koa": "^2.13.4",
+        "koa-static": "^5.0.0",
+        "redux": "^4.2.0"
+    },
+    "sideEffects": false
+}
