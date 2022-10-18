@@ -1,0 +1,5 @@
+const prodConfig  = {
+  mode: "production"
+}
+
+
