@@ -8,8 +8,8 @@
         "build": "webpack --mode production"
     },
     "dependencies": {
-        "preact": "^8.5.3",
-        "preact-compat": "^3.19.0"
+        "@preact/compat": "^17.1.2",
+        "preact": "^10.11.2"
     },
     "devDependencies": {
         "@babel/core": "^7.19.3",
