@@ -62,7 +62,7 @@ module.exports = {
         },
     },
     optimization: {
-        minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
+        // minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
         splitChunks: {
             chunks: "all",
             minSize: 0, // overrides webpack's minimum 30kb file size during splitting
