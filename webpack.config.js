@@ -47,7 +47,7 @@ module.exports = {
         }),
         new CompressionPlugin(),
         new MiniCssExtractPlugin(),
-        new BundleAnalyzerPlugin(),
+        // new BundleAnalyzerPlugin(),
     ],
     devServer: {
         host: "localhost",
