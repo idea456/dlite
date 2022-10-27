@@ -4,8 +4,8 @@ const BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
+// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+// const TerserPlugin = require("terser-webpack-plugin");
 const port = process.env.PORT || 3000;
 
 module.exports = {
