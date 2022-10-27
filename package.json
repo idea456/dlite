@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "webpack-dev-server",
+        "start": "webpack serve --open",
         "build": "webpack --mode production",
         "clean": "rm package-lock.json && npm i"
     },
@@ -33,6 +33,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "style-loader": "^3.3.1",
+        "terser-webpack-plugin": "^5.3.6",
         "webpack": "^5.74.0",
         "webpack-bundle-analyzer": "^4.6.1",
         "webpack-cli": "^4.10.0",

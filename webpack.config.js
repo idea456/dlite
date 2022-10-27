@@ -4,8 +4,7 @@ const BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-// const TerserPlugin = require("terser-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const port = process.env.PORT || 3000;
 
 module.exports = {
@@ -54,6 +53,7 @@ module.exports = {
         port: port,
         historyApiFallback: true,
         open: true,
+        static: "./dist",
     },
     resolve: {
         alias: {
@@ -62,7 +62,8 @@ module.exports = {
         },
     },
     optimization: {
-        // minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
+        minimize: true,
+        minimizer: [new CssMinimizerPlugin()],
         splitChunks: {
             chunks: "all",
             minSize: 0, // overrides webpack's minimum 30kb file size during splitting
