@@ -4,7 +4,7 @@ const BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const port = process.env.PORT || 3000;
 
 module.exports = {
@@ -63,7 +63,7 @@ module.exports = {
     },
     optimization: {
         minimize: true,
-        minimizer: [new CssMinimizerPlugin()],
+        // minimizer: [new CssMinimizerPlugin()],
         splitChunks: {
             chunks: "all",
             minSize: 0, // overrides webpack's minimum 30kb file size during splitting
