@@ -5,6 +5,7 @@ const BundleAnalyzerPlugin =
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const port = process.env.PORT || 3000;
 
 module.exports = {
@@ -61,7 +62,7 @@ module.exports = {
         },
     },
     optimization: {
-        minimizer: ["...", new CssMinimizerPlugin()],
+        minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
         splitChunks: {
             chunks: "all",
             minSize: 0, // overrides webpack's minimum 30kb file size during splitting
