@@ -61,23 +61,23 @@ module.exports = {
         },
     },
     optimization: {
-        minimizer: [new CssMinimizerPlugin()],
-        // splitChunks: {
-        //     chunks: "all",
-        //     minSize: 0, // overrides webpack's minimum 30kb file size during splitting
-        //     maxInitialRequests: Infinity,
-        //     cacheGroups: {
-        //         // defines where we group chunks to output files
-        //         vendor: {
-        //             test: /[\\/]node_modules[\\/]/,
-        //             name(module) {
-        //                 const packageName = module.context.match(
-        //                     /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-        //                 )[1];
-        //                 return `npm.${packageName.replace("@", "")}`;
-        //             },
-        //         },
-        //     },
-        // },
+        minimizer: ["...", new CssMinimizerPlugin()],
+        splitChunks: {
+            chunks: "all",
+            minSize: 0, // overrides webpack's minimum 30kb file size during splitting
+            maxInitialRequests: Infinity,
+            cacheGroups: {
+                // defines where we group chunks to output files
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name(module) {
+                        const packageName = module.context.match(
+                            /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+                        )[1];
+                        return `npm.${packageName.replace("@", "")}`;
+                    },
+                },
+            },
+        },
     },
 };
