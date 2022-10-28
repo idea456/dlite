@@ -7,7 +7,7 @@
         "start": "webpack serve --open",
         "build": "webpack --mode production",
         "clean": "rm package-lock.json && npm i",
-        "report": "webpack --profile --json --mode production > stats.json && webpack-bundle-analyzer stats.json"
+        "report": "webpack --profile --json --mode production > stats.json -- && webpack-bundle-analyzer stats.json"
     },
     "dependencies": {
         "@preact/compat": "^17.1.2",
