@@ -4,7 +4,7 @@ const BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const port = process.env.PORT || 3000;
 
 module.exports = {
@@ -21,7 +21,11 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     {
-                        loader: "babel-loader",
+                        loader: "esbuild-loader",
+                        options: {
+                            loader: "jsx", // Remove this if you're not using JSX
+                            target: "es2015", // Syntax to compile to (see options below for possible values)
+                        },
                     },
                 ],
             },
@@ -46,7 +50,9 @@ module.exports = {
         }),
         new CompressionPlugin(),
         new MiniCssExtractPlugin(),
-        // new BundleAnalyzerPlugin(),
+        new webpack.ProvidePlugin({
+            React: "react",
+        }),
     ],
     devServer: {
         host: "localhost",
@@ -63,7 +69,11 @@ module.exports = {
     },
     optimization: {
         minimize: true,
-        // minimizer: [new CssMinimizerPlugin()],
+        // https://github.com/privatenumber/minification-benchmarks
+        minimizer: [
+            // new UglifyJsPlugin(),
+            new ESBuildMinifyPlugin({ css: true }),
+        ],
         splitChunks: {
             chunks: "all",
             minSize: 0, // overrides webpack's minimum 30kb file size during splitting
