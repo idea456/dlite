@@ -5,7 +5,7 @@ const BundleAnalyzerPlugin =
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const port = process.env.PORT || 3000;
 
 module.exports = {
@@ -72,7 +72,7 @@ module.exports = {
         minimize: true,
         // https://github.com/privatenumber/minification-benchmarks
         minimizer: [
-            new UglifyJsPlugin(),
+            // new UglifyJsPlugin(),
             new ESBuildMinifyPlugin({ css: true }),
         ],
         splitChunks: {
