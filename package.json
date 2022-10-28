@@ -6,7 +6,8 @@
     "scripts": {
         "start": "webpack serve --open",
         "build": "webpack --mode production",
-        "clean": "rm package-lock.json && npm i"
+        "clean": "rm package-lock.json && npm i",
+        "report": "webpack --profile --json --mode production > stats.json && webpack-bundle-analyzer stats.json"
     },
     "dependencies": {
         "@preact/compat": "^17.1.2",
@@ -24,6 +25,7 @@
         "compression-webpack-plugin": "^10.0.0",
         "css-loader": "^6.7.1",
         "css-minimizer-webpack-plugin": "^4.2.2",
+        "esbuild-loader": "^2.20.0",
         "html-webpack-plugin": "^5.5.0",
         "mini-css-extract-plugin": "^2.6.1",
         "postcss": "^8.4.18",
@@ -34,6 +36,7 @@
         "react-dom": "^18.2.0",
         "style-loader": "^3.3.1",
         "terser-webpack-plugin": "^5.3.6",
+        "uglifyjs-webpack-plugin": "^2.2.0",
         "webpack": "^5.74.0",
         "webpack-bundle-analyzer": "^4.6.1",
         "webpack-cli": "^4.10.0",
