@@ -7,7 +7,8 @@
         "start": "webpack serve --open",
         "build": "webpack --mode production",
         "clean": "rm package-lock.json && npm i",
-        "report": "webpack --profile --json --mode production > stats.json -- && webpack-bundle-analyzer stats.json"
+        "report": "webpack --profile --json --mode production > stats.json -- && webpack-bundle-analyzer stats.json",
+        "prepare": "husky install"
     },
     "dependencies": {
         "@preact/compat": "^17.1.2",
@@ -27,6 +28,7 @@
         "css-minimizer-webpack-plugin": "^4.2.2",
         "esbuild-loader": "^2.20.0",
         "html-webpack-plugin": "^5.5.0",
+        "husky": "^8.0.1",
         "mini-css-extract-plugin": "^2.6.1",
         "postcss": "^8.4.18",
         "postcss-import": "^15.0.0",
