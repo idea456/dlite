@@ -11,11 +11,14 @@ const History = () => {
   }, []);
 
   const onOpen = () => {
+    // TODO: Need to get api token from local storage once login has been done
     api.send(
       JSON.stringify({
         authorize: "iM0TwAmsmTAheVh",
       })
     );
+
+    // TODO: Find a better way to send api requests instead of setTimeout
     setTimeout(() => {
       api.send(
         JSON.stringify({
@@ -50,9 +53,7 @@ const History = () => {
             const transaction_time = new Date(
               statement.transaction_time * 1000
             );
-            console.log(purchase_time);
             const shortcode = statement.shortcode.split("_");
-            console.log(shortcode);
             return (
               <div className="history__card" key={key}>
                 <div className="history__card-header">
