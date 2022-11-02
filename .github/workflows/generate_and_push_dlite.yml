@@ -30,8 +30,11 @@ jobs:
           new_version=$(json -f ./package.json version)
           
           head="gh-actions/$new_version"
-          git push origin -d "$head"
-          git checkout -b "$head"
+          if [ $(git ls-remote origin "$head") ]; then
+            git push origin -d "$head"
+          else
+            git checkout -b "$head"
+          fi
           
           git commit -a -m "feat: bump version from $old_version to $new_version." --allow-empty
           git push origin "$head"
