@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import api from "../api";
 import "../styles/index.css";
@@ -19,9 +18,8 @@ const App = () => {
   const [subscriptionId, setSubscriptionId] = useState("");
   const [color, setColor] = useState("black");
   const [error, setError] = useState("");
-  const [isPurchase, setPurchase] = React.useState(false);
-  const [ProposalId, setProposalId] = React.useState('');
-
+  const [isPurchase, setPurchase] = useState(false);
+  const [ProposalId, setProposalId] = useState("");
 
   useEffect(() => {
     api.addEventListener("message", onMessage);
@@ -29,11 +27,10 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-   
-    if(ProposalId !== ''){
+    if (ProposalId !== "") {
       Buy();
     }
-  }, [ProposalId])
+  }, [ProposalId]);
 
   const Buy = () => {
     api.send(
@@ -42,22 +39,23 @@ const App = () => {
         price: 100,
       })
     );
-  } 
+  };
 
   const onMessage = (msg) => {
     const data = JSON.parse(msg.data);
     if (data.proposal?.id) {
       setProposalId(data.proposal?.id);
     }
+    const marketsData = {};
     switch (data.msg_type) {
       case "active_symbols":
         setSymbols(data.active_symbols);
-        const markets = {};
-        data.active_symbols.forEach(({ market, market_display_name }) => {
+
+        data.active_symbols.forEach(({ market, marketDisplayName }) => {
           // creating a hashmap to store market and market_display_name
-          markets[market] = `${market}:${market_display_name}`;
+          markets[market] = `${market}:${marketDisplayName}`;
         });
-        setMarkets(markets);
+        setMarkets(marketsData);
         break;
 
       case "tick":
@@ -71,17 +69,17 @@ const App = () => {
         setTick((prevTick) => {
           const { tick } = data;
           if (prevTick?.quote > tick?.quote) {
-            setColor(colors["red"]);
+            setColor(colors.red);
           } else if (prevTick?.quote < tick?.quote) {
-            setColor(colors["green"]);
+            setColor(colors.green);
           } else {
-            setColor(colors["black"]);
+            setColor(colors.black);
           }
           return tick;
         });
         setSubscriptionId(data.subscription.id);
         break;
-       
+
       default:
         return;
     }
@@ -122,10 +120,7 @@ const App = () => {
         symbol: "R_100",
       })
     );
-   
   };
-
-
 
   useEffect(() => {
     if (activeSymbol) {
@@ -196,16 +191,13 @@ const App = () => {
           </option>
           {symbolsToDisplay &&
             symbolsToDisplay.length &&
-            symbolsToDisplay.map((sym) => {
-              return (
-                <option value={sym.symbol} key={sym.symbol}>
-                  {sym.display_name}
-                </option>
-              );
-            })}
+            symbolsToDisplay.map((sym) => (
+              <option value={sym.symbol} key={sym.symbol}>
+                {sym.display_name}
+              </option>
+            ))}
         </select>
       </div>
-      <div></div>
       <div className="bg-white v-center rounded p-2 bordered">
         <h2 style={{ color }}>{tick && Number(tick.quote || 0)}</h2>
       </div>
