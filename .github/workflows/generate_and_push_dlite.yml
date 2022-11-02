@@ -17,13 +17,8 @@ jobs:
         with:
           fetch-depth: 1
           ref: develop
-      - name: Setup build
-        id: step2
-        run: |
-          npm install
-          npm run build
       - name: Bump version and create PR
-        id: step3
+        id: step2
         run: |
           npm install -g json@latest
           
@@ -31,16 +26,17 @@ jobs:
           git config --global user.name ${{ secrets.GH_USERNAME }}
           git config --global user.email ${{ secrets.GH_EMAIL }}
           
-          head="gh-actions/$old_version"
-          git checkout -b "$head"
-
           npm version patch
-          
           new_version=$(json -f ./package.json version)
+          
+          head="gh-actions/$new_version"
+          git push origin -d "$head"
+          git checkout -b "$head"
+          
           git commit -a -m "feat: bump version from $old_version to $new_version." --allow-empty
           git push origin "$head"
           
           sudo apt install gh
           gh auth login --with-token <<< ${{ github.token }}
           gh pr create --title "Bump dlite from $old_version to $new_version" --body "" --base "main" --head "$head"
-          
+      
