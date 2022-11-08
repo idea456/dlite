@@ -3,12 +3,19 @@ body {
   font-family: Roboto;
 }
 
+.title{
+  color: #ff444f;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #dfe6e9;
-  padding: 1rem 5rem;
+  background-color: #151717;;
+  padding: 0 15rem;
   height: 100vh;
   font-family: Roboto;
 }
@@ -26,8 +33,9 @@ select {
   text-align: center;
 }
 
-.pa-2 {
+.p-2 {
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .rounded {
@@ -35,12 +43,12 @@ select {
 }
 
 .bordered {
-  border: 1px solid black;
+  border: 1px solid #6e6e6e;
 }
 
 .txt-special-grey {
   font-size: 0.8rem;
-  color: #9b9b9b;
+  color: #c2c2c2;
 }
 
 .txt-market-running {

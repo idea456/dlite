@@ -5,7 +5,7 @@ import "../styles/index.css";
 import "../styles/purchase.css";
 
 const colors = {
-  black: "#000000",
+  black: "#ffffff",
   red: "#FA3939",
   green: "#14CC00",
 };
@@ -196,7 +196,7 @@ const App = () => {
   return (
     <div className="container">
       <div>
-        <h2>DLite</h2>
+        <h2 className="title">DLite</h2>
       </div>
       <div>
         <select
@@ -259,7 +259,7 @@ const App = () => {
       </div>
       <div></div>
       <div className="bg-white v-center rounded p-2 bordered">
-        <h2 style={{ color }}>{tick && Number(tick.quote || 0)}</h2>
+        <h2 style={{ color:'white' }}>{tick && Number(tick.quote || 0)}</h2>
       </div>
       {!activeSymbol && !error && (
         <span className="txt-special-grey">
@@ -276,7 +276,7 @@ const App = () => {
           handleClick();
           Buy();
         }}>
-          Purchase ↑
+          Purchase
         </button>
         
 
