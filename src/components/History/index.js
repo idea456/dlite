@@ -1,24 +1,13 @@
-import React, { useEffect, useState } from "react";
-import api from "../../api";
-import "./history.css";
+import React from "react";
+import api from '../../api'
+import "./index.css";
 
-const History = () => {
-  const [historyData, setHistoryData] = useState([]);
-  const [currency, setCurrency] = useState(0);
-  useEffect(() => {
-    api.addEventListener("open", onOpen);
-    api.addEventListener("message", onMessage);
-  }, []);
-
-  const onOpen = () => {
-    // TODO: Need to get api token from local storage once login has been done
-    api.send(
-      JSON.stringify({
-        authorize: "iM0TwAmsmTAheVh",
-      })
-    );
-
-    // TODO: Find a better way to send api requests instead of setTimeout
+const Index = ({ historyData, currency, setHistoryData, setCurrency }) => {
+  React.useEffect(() => {
+    sendMessage();
+  })
+  
+  const sendMessage = () => {
     setTimeout(() => {
       api.send(
         JSON.stringify({
@@ -35,14 +24,7 @@ const History = () => {
         })
       );
     }, 500);
-  };
-
-  const onMessage = (message) => {
-    const data = JSON.parse(message.data);
-
-    if (data?.statement) setHistoryData(data?.statement?.transactions);
-    if (data?.authorize) setCurrency(data?.authorize?.currency);
-  };
+  }
 
   return (
     <div className="history">
@@ -125,7 +107,7 @@ const History = () => {
         <div className="loading">Loading...</div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default History;
+export default Index;
