@@ -20,36 +20,59 @@ const App = () => {
   const [color, setColor] = useState("black");
   const [error, setError] = useState("");
   const [isPurchase, setPurchase] = React.useState(false);
-  const [ProposalId, setProposalId] = React.useState('');
-
+  const [ProposalId, setProposalId] = React.useState("");
+  const [ContractTypes, setContractTypes] = React.useState([]);
+  const [ContractType, setContractType] = React.useState({});
+  const [BuyPrice, setBuyPrice] = React.useState('')
 
   useEffect(() => {
     api.addEventListener("message", onMessage);
     api.addEventListener("open", onOpen);
   }, []);
 
-  useEffect(() => {
-   
-    if(ProposalId !== ''){
-      Buy();
-    }
-  }, [ProposalId])
-
   const Buy = () => {
+
+    // console.log(
+    //   ContractTypes[ContractType]?.min_contract_duration.replace(/\D/g, "")
+    // );
+
     api.send(
       JSON.stringify({
-        buy: ProposalId,
-        price: 100,
+        proposal: 1,
+        amount: 5,
+        barrier: ContractTypes[ContractType]?.barrier,
+        basis: "payout",
+        contract_type: ContractTypes[ContractType]?.contract_type,
+        currency: "USD",
+        duration: ContractTypes[
+          ContractType
+        ]?.min_contract_duration.replace(/\D/g, ""),
+        duration_unit: ContractTypes[
+          ContractType
+        ]?.min_contract_duration.replace(/[^A-Za-z]/g, ""),
+        symbol: activeSymbol,
       })
     );
-  } 
+
+    setTimeout(() => {
+      api.send(
+        JSON.stringify({
+          buy: ProposalId,
+          price: 5,
+        })
+      );
+    }, 5000);
+    
+  };
 
   const onMessage = (msg) => {
     const data = JSON.parse(msg.data);
     if (data.proposal?.id) {
       setProposalId(data.proposal?.id);
     }
+    
     switch (data.msg_type) {
+     
       case "active_symbols":
         setSymbols(data.active_symbols);
         const markets = {};
@@ -59,7 +82,6 @@ const App = () => {
         });
         setMarkets(markets);
         break;
-
       case "tick":
         if (data && data.error) {
           const { message = "Something went wrong, please reload" } =
@@ -81,7 +103,28 @@ const App = () => {
         });
         setSubscriptionId(data.subscription.id);
         break;
+      case "contracts_for":
+        if (data && data.error) {
+          const { message = "Something went wrong, please reload" } =
+            (data && data.error) || {};
+          setError(message);
+          setContractTypes([]);
+          return;
+        }
+        setContractTypes(data?.contracts_for?.available);
        
+       
+      case "proposal":
+        if (data && data.error) {
+          const { message = "Something went wrong, please reload" } =
+            (data && data.error) || {};
+          setError(message);
+          
+          return;
+        }
+        
+        case "buy":
+          setBuyPrice(data.buy?.buy_price);
       default:
         return;
     }
@@ -99,33 +142,9 @@ const App = () => {
         authorize: "qfohvs33BsJx9is",
       })
     );
-    setTimeout(() => {
-      api.send(
-        JSON.stringify({
-          proposal_open_contract: 1,
-          contract_id: 11111111,
-          subscribe: 1,
-        })
-      );
-    }, 2000);
-
-    api.send(
-      JSON.stringify({
-        proposal: 1,
-        amount: 100,
-        barrier: "+0.1",
-        basis: "payout",
-        contract_type: "CALL",
-        currency: "USD",
-        duration: 60,
-        duration_unit: "s",
-        symbol: "R_100",
-      })
-    );
-   
   };
 
-
+  // console.log(ContractTypes);
 
   useEffect(() => {
     if (activeSymbol) {
@@ -135,6 +154,8 @@ const App = () => {
           subscribe: 1,
         })
       );
+
+      getContracts();
 
       if (subscriptionId) {
         console.info("forget: ", subscriptionId);
@@ -157,6 +178,17 @@ const App = () => {
     symbols.length &&
     (symbols.filter((sym) => sym.market === activeMarket) || []);
 
+  const getContracts = () => {
+    console.log("get");
+    api.send(
+      JSON.stringify({
+        contracts_for: activeSymbol,
+        currency: "USD",
+        product_type: "basic",
+      })
+    );
+  };
+
   const handleClick = () => {
     setPurchase(!isPurchase);
   };
@@ -164,7 +196,7 @@ const App = () => {
   return (
     <div className="container">
       <div>
-        <h2>Price Tracker</h2>
+        <h2>DLite</h2>
       </div>
       <div>
         <select
@@ -204,6 +236,26 @@ const App = () => {
               );
             })}
         </select>
+        <select
+          onChange={({ target: { value } }) => {
+            setContractType(value);
+            // console.log(ContractType?.min_contract_duration.replace(/[^A-Za-z]/g, ''), ContractType?.min_contract_duration.replace( /^\D+/g, ''))
+          }}
+          value={ContractType}
+          disabled={isDisabled}
+        >
+          <option disabled value="">
+            Contract Type
+          </option>
+          {ContractTypes.length > 0 &&
+            ContractTypes.map((contract, key) => {
+              return (
+                <option value={key} key={key}>
+                  {contract.contract_category_display}
+                </option>
+              );
+            })}
+        </select>
       </div>
       <div></div>
       <div className="bg-white v-center rounded p-2 bordered">
@@ -220,19 +272,23 @@ const App = () => {
       {error && <span className="txt-error">{error}</span>}
 
       <div className="purchase_button">
-        <button className="purchase_higher" type="button" onClick={handleClick}>
+        <button className="purchase_higher" type="button" onClick={() => {
+          handleClick();
+          Buy();
+        }}>
           Purchase ↑
         </button>
-        <button className="purchase_lower" type="button" onClick={handleClick}>
-          Purchase ↓
-        </button>
+        
 
-        {isPurchase && (
+        
+      </div>
+      {BuyPrice && (
           <div className="bg-white v-center rounded p-2 bordered">
-            <h2 style={{ color }}>{tick && Number(tick.quote || 0)}</h2>
+            <h2 style={{
+              color: '#000'
+            }}>{`Contract Brought at ${BuyPrice}`}</h2>
           </div>
         )}
-      </div>
     </div>
   );
 };

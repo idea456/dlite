@@ -14,7 +14,7 @@ const History = () => {
     // TODO: Need to get api token from local storage once login has been done
     api.send(
       JSON.stringify({
-        authorize: "iM0TwAmsmTAheVh",
+        authorize: "qfohvs33BsJx9is",
       })
     );
 
@@ -25,7 +25,7 @@ const History = () => {
           get_account_status: 1,
         })
       );
-    }, 500);
+    }, 1000);
     setTimeout(() => {
       api.send(
         JSON.stringify({
@@ -34,7 +34,7 @@ const History = () => {
           limit: 100,
         })
       );
-    }, 500);
+    }, 1000);
   };
 
   const onMessage = (message) => {
