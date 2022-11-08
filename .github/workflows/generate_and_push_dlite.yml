@@ -1,0 +1,53 @@
+name: Generate and push Dlite
+on:
+  workflow_dispatch:
+
+jobs:
+  generate_and_push_dlite:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Setup node
+        id: step1
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          check-latest: true
+          registry-url: "https:registry.npmjs.org"
+      - name: Checkout develop
+        uses: actions/checkout@v3
+        with:
+          ref: 'develop'
+      - name: Setup build
+        id: step2
+        run: |
+          npm run build
+      - name: Bump version
+        id: step3
+        run: |
+          npm install -g json@latest
+          
+          old_version=$(json -f ./package.json version)
+          
+          git checkout dlite/"$old_version"
+          npm version patch
+          new_version=$(json -f ./package.json version)
+          
+      - name: Create PR
+        id: step4
+        run: |
+          git config --global user.name ${{ secrets.GITHUB_USERNAME }}
+          git config --global user.email ${{ secrets.GITHUB_EMAIL }}
+          
+          git commit -a -m "feat: bump from version $old_version to $new_version."
+          pr_body=$(git diff HEAD..main)
+          
+          sudo apt install gh
+          gh auth login --with-token <<< ${{ github.token }}
+          gh pr create --title "Bump Dlite from $old_version to $new_version" --body "diff ${pr_body:0:5000} \`\`\`" --base "main" --head "develop"
+
+          
+          
+      
+          
+        
+    
