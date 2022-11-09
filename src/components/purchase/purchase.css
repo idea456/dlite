@@ -1,0 +1,101 @@
+.button-group {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-buy {
+  width: 45%;
+  font-size: 1.2rem;
+  color: white;
+  background-color: #14cc00;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  height: 3rem;
+  cursor: pointer;
+  border: none;
+}
+
+.button-sell {
+  width: 45%;
+  font-size: 1.2rem;
+  color: white;
+  background-color: #ff444f;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  height: 3rem;
+  cursor: pointer;
+  border: none;
+}
+
+.purchase_lower {
+  width: 40%;
+  font-size: 1.2rem;
+  color: white;
+  background-color: #ec3f3f;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  height: 3rem;
+  cursor: pointer;
+  border: none;
+}
+
+.title {
+  color: #ff444f;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #151717;
+  padding: 0 1rem;
+  height: 100vh;
+  font-family: Roboto;
+}
+
+select {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border: 1px solid black;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+.v-center {
+  text-align: center;
+}
+
+.p-2 {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rounded {
+  border-radius: 0.5rem;
+}
+
+.bordered {
+  border: 1px solid #6e6e6e;
+}
+
+.txt-special-grey {
+  font-size: 0.8rem;
+  color: #c2c2c2;
+}
+
+.txt-market-running {
+  font-size: 0.8rem;
+  color: #14cc00;
+}
+
+.txt-error {
+  font-size: 0.8rem;
+  color: #fa3939;
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App";
+import App from "./App";
+import Purchase from "./components/purchase/purchase";
 import History from "./components/history/history";
 
-ReactDOM.render(<History />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));

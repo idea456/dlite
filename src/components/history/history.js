@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
+import Loading from "../loading/loading";
 import "./history.css";
 
 const History = () => {
@@ -10,58 +11,7 @@ const History = () => {
     api.addEventListener("message", onMessage);
   }, []);
 
-  // const auth = async () =>
-  //   api.send(
-  //     JSON.stringify({
-  //       authorize: "iM0TwAmsmTAheVh",
-  //     })
-  //   );
-
-  // const status = async () =>
-  //   api.send(
-  //     JSON.stringify({
-  //       get_account_status: 1,
-  //     })
-  //   );
-
-  // const statement = api.send(
-  //   JSON.stringify({
-  //     statement: 1,
-  //     description: 1,
-  //     limit: 100,
-  //   })
-  // );
-
-  // const test = async () => {
-  //   api.send(
-  //     JSON.stringify({
-  //       authorize: "iM0TwAmsmTAheVh",
-  //     })
-  //   );
-
-  //   api.send(
-  //     JSON.stringify({
-  //       get_account_status: 1,
-  //     })
-  //   );
-
-  //   api.send(
-  //     JSON.stringify({
-  //       statement: 1,
-  //       description: 1,
-  //       limit: 100,
-  //     })
-  //   );
-  // };
-
   const onOpen = () => {
-    // TODO: Need to get api token from local storage once login has been done
-    api.send(
-      JSON.stringify({
-        authorize: "iM0TwAmsmTAheVh",
-      })
-    );
-
     // TODO: Find a better way to send api requests instead of setTimeout
     setTimeout(() => {
       api.send(
@@ -69,7 +19,7 @@ const History = () => {
           get_account_status: 1,
         })
       );
-    }, 500);
+    }, 1000);
     setTimeout(() => {
       api.send(
         JSON.stringify({
@@ -78,12 +28,11 @@ const History = () => {
           limit: 100,
         })
       );
-    }, 500);
+    }, 1000);
   };
 
   const onMessage = (message) => {
     const data = JSON.parse(message.data);
-    console.log(data);
 
     if (data?.authorize) setCurrency(data?.authorize?.currency);
     if (data?.statement) setHistoryData(data?.statement?.transactions);
@@ -91,7 +40,7 @@ const History = () => {
 
   return (
     <div className="history">
-      {historyData ? (
+      {historyData.length > 0 ? (
         <div className="history__cards">
           {historyData.map((statement, key) => {
             const purchase_time = new Date(statement.purchase_time * 1000);
@@ -167,7 +116,7 @@ const History = () => {
           })}
         </div>
       ) : (
-        <div className="loading">Loading...</div>
+        <Loading />
       )}
     </div>
   );
