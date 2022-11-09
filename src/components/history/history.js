@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
+import Loading from "../loading/loading";
 import "./history.css";
 
 const History = () => {
@@ -11,13 +12,6 @@ const History = () => {
   }, []);
 
   const onOpen = () => {
-    // TODO: Need to get api token from local storage once login has been done
-    api.send(
-      JSON.stringify({
-        authorize: "qfohvs33BsJx9is",
-      })
-    );
-
     // TODO: Find a better way to send api requests instead of setTimeout
     setTimeout(() => {
       api.send(
@@ -40,13 +34,13 @@ const History = () => {
   const onMessage = (message) => {
     const data = JSON.parse(message.data);
 
-    if (data?.statement) setHistoryData(data?.statement?.transactions);
     if (data?.authorize) setCurrency(data?.authorize?.currency);
+    if (data?.statement) setHistoryData(data?.statement?.transactions);
   };
 
   return (
     <div className="history">
-      {historyData ? (
+      {historyData.length > 0 ? (
         <div className="history__cards">
           {historyData.map((statement, key) => {
             const purchase_time = new Date(statement.purchase_time * 1000);
@@ -122,7 +116,7 @@ const History = () => {
           })}
         </div>
       ) : (
-        <div className="loading">Loading...</div>
+        <Loading />
       )}
     </div>
   );
