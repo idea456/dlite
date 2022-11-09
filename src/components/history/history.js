@@ -10,6 +10,50 @@ const History = () => {
     api.addEventListener("message", onMessage);
   }, []);
 
+  // const auth = async () =>
+  //   api.send(
+  //     JSON.stringify({
+  //       authorize: "iM0TwAmsmTAheVh",
+  //     })
+  //   );
+
+  // const status = async () =>
+  //   api.send(
+  //     JSON.stringify({
+  //       get_account_status: 1,
+  //     })
+  //   );
+
+  // const statement = api.send(
+  //   JSON.stringify({
+  //     statement: 1,
+  //     description: 1,
+  //     limit: 100,
+  //   })
+  // );
+
+  // const test = async () => {
+  //   api.send(
+  //     JSON.stringify({
+  //       authorize: "iM0TwAmsmTAheVh",
+  //     })
+  //   );
+
+  //   api.send(
+  //     JSON.stringify({
+  //       get_account_status: 1,
+  //     })
+  //   );
+
+  //   api.send(
+  //     JSON.stringify({
+  //       statement: 1,
+  //       description: 1,
+  //       limit: 100,
+  //     })
+  //   );
+  // };
+
   const onOpen = () => {
     // TODO: Need to get api token from local storage once login has been done
     api.send(
@@ -39,9 +83,10 @@ const History = () => {
 
   const onMessage = (message) => {
     const data = JSON.parse(message.data);
+    console.log(data);
 
-    if (data?.statement) setHistoryData(data?.statement?.transactions);
     if (data?.authorize) setCurrency(data?.authorize?.currency);
+    if (data?.statement) setHistoryData(data?.statement?.transactions);
   };
 
   return (
