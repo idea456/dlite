@@ -25,6 +25,8 @@ jobs:
       - name: Bump version and create PR
         id: step3
         run: |
+          git config --global user.name ${{ secrets.GH_USERNAME }}
+          git config --global user.email ${{ secrets.GH_EMAIL }}
           npm install -g json@latest
           
           old_version=$(json -f ./package.json version)
@@ -38,9 +40,6 @@ jobs:
           npm version major
           new_version=$(json -f ./package.json version)
           npm install -g json@latest
-          
-          git config --global user.name ${{ secrets.GH_USERNAME }}
-          git config --global user.email ${{ secrets.GH_EMAIL }}
           
           git checkout -b "$head" develop
           npm version major
