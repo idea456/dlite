@@ -267,7 +267,7 @@ const Purchase = () => {
     return (
         <div className='container'>
             <h2 className='user-balance'>$ {balance}</h2>
-            <h2 className='title'>DLite</h2>
+            <h2 className='title'>🌈 DLite</h2>
             <div>
                 <select
                     onChange={({ target: { value } }) => setActiveMarket(value)}
@@ -371,17 +371,23 @@ const Purchase = () => {
                     Down
                 </button>
             </div>
-            {console.log("isproc", isProcessing)}
-            {BuyPrice && (
+            {!isProcessing && BuyPrice && (
                 <div className='bg-white v-center rounded p-2 bordered'>
                     <h2
                         style={{
+                            margin: "0 auto",
                             color: "#fff",
                         }}
-                    >{`Contract Brought at ${BuyPrice}`}</h2>
+                    >{`Contract Brought at $${BuyPrice}`}</h2>
                 </div>
             )}
-            {isProcessing && <h2 className='processing'>Buying contract...</h2>}
+            {isProcessing && (
+                <div className='bg-white v-center rounded p-2 bordered'>
+                    <h2 style={{ margin: "0 auto" }} className='processing'>
+                        Buying contract...
+                    </h2>
+                </div>
+            )}
         </div>
     );
 };
