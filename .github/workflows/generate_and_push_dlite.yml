@@ -41,16 +41,24 @@ jobs:
       - name: Create PR
         id: step4
         run: |
-          git config --global user.name ${{ secrets.GITHUB_USERNAME }}
-          git config --global user.email ${{ secrets.GITHUB_EMAIL }}
+npm install -g json@latest
           
-          git add .
-          git commit -m "feat: bump from version $old_version to $new_version."
+          old_version=$(json -f ./package.json version)
+          git config --global user.name ${{ secrets.GH_USERNAME }}
+          git config --global user.email ${{ secrets.GH_EMAIL }}
+          
+          head="gh-actions/$old_version"
+          git checkout -b "$head" develop
+          npm version major
+          
+          new_version=$(json -f ./package.json version)
+          git commit -a -m "feat: Bump version from $old_version to $new_version." --allow-empty
+          git push origin "$head"
           pr_body=$(git diff HEAD..main)
           
           sudo apt install gh
           gh auth login --with-token <<< ${{ github.token }}
-          gh pr create --title "Bump Dlite from $old_version to $new_version" --body "\`\`\`diff ${pr_body:0:5000} \`\`\`" --base "main" --head "develop"
+          gh pr create --title "Bump dlite from $old_version to $new_version" --body "$pr_body" --base "main" --head "$head"
 
           
           
