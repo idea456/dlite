@@ -22,7 +22,7 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: Bump version
+      - name: Bump version and create PR
         id: step3
         run: |
           npm install -g json@latest
@@ -32,22 +32,16 @@ jobs:
           head="dlite/$new_version"
           if [ $(git ls-remote origin "$head") ]; then
             git push origin -d "$head"
-          else
-            git checkout -b "$head"
           fi
+          
+          git checkout -b "$head"
           npm version major
           new_version=$(json -f ./package.json version)
-          
-      - name: Create PR
-        id: step4
-        run: |
           npm install -g json@latest
           
-          old_version=$(json -f ./package.json version)
           git config --global user.name ${{ secrets.GH_USERNAME }}
           git config --global user.email ${{ secrets.GH_EMAIL }}
           
-          head="gh-actions/$old_version"
           git checkout -b "$head" develop
           npm version major
           
