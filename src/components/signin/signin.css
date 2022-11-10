@@ -1,0 +1,43 @@
+.SiginWrapper .login {
+    background-color: #ff444f;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-weight: 700;
+    height: 30px;
+}
+
+.SiginWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 500px;
+    height: 500px;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+.SiginWrapper input,
+.SiginWrapper button {
+    margin-bottom: 1rem;
+}
+
+.SiginWrapper input {
+    width: 200px;
+    outline: none;
+    border: none;
+    height: 30px;
+}
+.SiginWrapper button {
+    width: 4rem;
+    height: 2rem;
+}
+.Sigin {
+    background-color: #ff444f;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
