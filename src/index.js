@@ -1,14 +1,5 @@
-import store from "./store";
-import "../styles/index.css";
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
 
-// const socket = new WebSocket("wss://echo.websocket.org");
-
-// socket.addEventListener("open", (e) => {
-//     socket.send("Hewwo");
-// });
-
-// socket.addEventListener("message", (e) => {
-//     console.log("Message from socket: %s", e.data);
-// });
-
-console.log(store.getState());
+ReactDOM.render(<App />, document.getElementById("root"));

@@ -1,0 +1,10 @@
+{
+    "presets": [
+        "@babel/preset-env",
+        ["@babel/preset-react", { "runtime": "automatic" }] // for dev mode: automatic auto imports the functions that JSX transpiles to. Fixes issue with 'react' not recognized
+    ],
+    "plugins": [
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-proposal-class-properties"
+    ]
+}
