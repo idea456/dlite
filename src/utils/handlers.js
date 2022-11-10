@@ -6,7 +6,7 @@ export const attachHandlers = (
     messageHandler,
     loadingHandler,
 ) => {
-    let queue = priority;
+    let queue = [...priority];
     let count = queue.length;
     let buffer = [];
 
@@ -18,9 +18,12 @@ export const attachHandlers = (
     };
     const onMessage = (message) => {
         const res = JSON.parse(message.data);
-        count -= count <= 0 ? 0 : 1;
+        if (priority.includes(res.msg_type)) {
+            count -= count <= 0 ? 0 : 1;
+        }
 
         if (res.msg_type === queue[0]) {
+            console.log(res);
             messageHandler(res);
             queue.shift();
         } else {
@@ -32,18 +35,10 @@ export const attachHandlers = (
                 let msg_type = queue.shift();
                 console.log(buffer[0]);
                 let item = buffer.find((msg) => msg.msg_type === msg_type);
-                if (!item) {
-                    loadingHandler(false);
-                    return;
-                }
                 messageHandler(buffer.find((msg) => msg.msg_type === msg_type));
             }
             loadingHandler(false);
         }
-        // if (queue.length === 0 && count === 0) {
-        //     console.log("no more loading");
-        //     setLoading(false);
-        // }
     };
 
     if (api.readyState === WebSocket.OPEN) {

@@ -33,7 +33,11 @@ const Purchase = () => {
 
     useEffect(() => {
         api.addEventListener("message", onMessage);
-        api.addEventListener("open", onOpen);
+        if (api.readyState === WebSocket.OPEN) {
+            onOpen();
+        } else {
+            api.addEventListener("open", onOpen);
+        }
     }, []);
 
     useEffect(() => {
@@ -358,7 +362,6 @@ const Purchase = () => {
                 <span className='txt-market-running'>Market is running</span>
             )}
             {error && <span className='txt-error'>{error}</span>}
-            <button onClick={() => navigate("history")}>History</button>
             <div className='button-group'>
                 <button
                     className='button-buy'

@@ -1,0 +1,32 @@
+.NavBarWrapper {
+    display: flex;
+    justify-content: space-between;
+    background-color: #000;
+    padding: 1rem;
+    width: 97%;
+    left: 0;
+    position: fixed;
+}
+.NavBarWrapper img {
+    width: 10rem;
+}
+
+@media screen and (max-width: 768px) {
+    .NavBarWrapper img {
+        display: none;
+    }
+
+    .NavBarWrapper {
+        justify-content: flex-end;
+    }
+}
+
+.NavBarWrapper .login {
+    background-color: #ff444f;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-weight: 700;
+    height: 30px;
+    margin-right: 10px;
+}

@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
-import api from "../../api";
-import Loadable from "react-loadable";
 import { attachHandlers } from "../../utils/handlers";
-
+import { useRouter } from "../../App";
+import Loading from "../loading/loading";
 import(/* webpackPreload: true */ "./history.css");
-
-const LazyLoading = Loadable({
-    loader: () => import("../loading/loading"),
-    loading: () => {},
-});
 
 const History = () => {
     const [historyData, setHistoryData] = useState([]);
@@ -147,7 +141,7 @@ const History = () => {
                     })}
                 </div>
             ) : (
-                <LazyLoading />
+                <Loading />
             )}
         </div>
     );

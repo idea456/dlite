@@ -79,7 +79,7 @@ module.exports = {
         },
     },
     optimization: {
-        minimize: false,
+        minimize: true,
         // https://github.com/privatenumber/minification-benchmarks
         // minimizer: [new ESBuildMinifyPlugin({ css: true })],
         minimizer: [
@@ -91,6 +91,7 @@ module.exports = {
         splitChunks: {
             chunks: "all",
             minSize: 0, // overrides webpack's minimum 30kb file size during splitting
+            minChunks: 2,
             maxInitialRequests: Infinity,
             cacheGroups: {
                 // defines where we group chunks to output files
