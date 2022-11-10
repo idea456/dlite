@@ -30,18 +30,11 @@ jobs:
             git push origin -d "$head"
           fi
           
-          git checkout -b "$head"
+          git checkout -b "$head" develop
           npm version major
           new_version=$(json -f ./package.json version)
           npm install -g json@latest
           
-          if [ $(git ls-remote origin "$head") ]; then
-            git push origin -d "$head"
-          fi
-          git checkout -b "$head" develop
-          npm version major
-          
-          new_version=$(json -f ./package.json version)
           git commit -a -m "feat: Bump version from $old_version to $new_version." --allow-empty
           git push origin "$head"
           pr_body=$(git diff HEAD..main)
