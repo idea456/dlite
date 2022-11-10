@@ -41,7 +41,7 @@ jobs:
       - name: Create PR
         id: step4
         run: |
-npm install -g json@latest
+          npm install -g json@latest
           
           old_version=$(json -f ./package.json version)
           git config --global user.name ${{ secrets.GH_USERNAME }}
