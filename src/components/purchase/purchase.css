@@ -49,6 +49,13 @@
   text-align: center;
 }
 
+.user-balance {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
 .container {
   display: flex;
   flex-direction: column;
