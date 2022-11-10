@@ -35,7 +35,7 @@ jobs:
           new_version=$(json -f ./package.json version)
           npm install -g json@latest
           
-          git commit -a -m "feat: Bump version from $old_version to $new_version." --allow-empty
+          git commit -a -m "feat: Bump version from $old_version to $new_version." --allow-empty -f
           git push origin "$head"
           
           sudo apt install gh
