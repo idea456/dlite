@@ -4,14 +4,16 @@ const BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
+const PreloadWebpackPlugin = require("@vue/preload-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const port = process.env.PORT || 3000;
 
 module.exports = {
     mode: "development",
     entry: "./src/index.js",
     output: {
-        filename: "[name].[hash].js",
+        filename: "[name].[contenthash].js",
     },
     devtool: "inline-source-map",
     module: {
@@ -21,7 +23,11 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     {
-                        loader: "babel-loader",
+                        loader: "esbuild-loader",
+                        options: {
+                            loader: "jsx", // Remove this if you're not using JSX
+                            target: "es2015", // Syntax to compile to (see options below for possible values)
+                        },
                     },
                 ],
             },
@@ -45,14 +51,25 @@ module.exports = {
             template: "public/index.html",
         }),
         new CompressionPlugin(),
-        new MiniCssExtractPlugin(),
-        // new BundleAnalyzerPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "[name].[contenthash].css", // contenthash for long-term caching
+        }),
+        new webpack.ProvidePlugin({
+            React: "react",
+        }),
+        // new PreloadWebpackPlugin({
+        //     rel: "preload",
+        //     as(entry) {
+        //         if (/\.css$/.test(entry)) return "style";
+        //     },
+        // }),
     ],
     devServer: {
         host: "localhost",
         port: port,
         historyApiFallback: true,
         open: true,
+        hot: true,
         static: "./dist",
     },
     resolve: {
@@ -63,10 +80,18 @@ module.exports = {
     },
     optimization: {
         minimize: true,
-        // minimizer: [new CssMinimizerPlugin()],
+        // https://github.com/privatenumber/minification-benchmarks
+        minimizer: [new ESBuildMinifyPlugin({ css: true })],
+        // minimizer: [
+        //     new TerserPlugin({
+        //         minify: TerserPlugin.swcMinify,
+        //         terserOptions: {},
+        //     }),
+        // ],
         splitChunks: {
             chunks: "all",
             minSize: 0, // overrides webpack's minimum 30kb file size during splitting
+            minChunks: 2,
             maxInitialRequests: Infinity,
             cacheGroups: {
                 // defines where we group chunks to output files
