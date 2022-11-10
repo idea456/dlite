@@ -13,7 +13,7 @@ const NavBar = ({ setToken }) => {
             <img src='https://deriv.com/static/1b57a116945933314eefeec0030c8e9d/6fdc6/logo.webp' />
             <div>
                 <button className='login' onClick={() => navigate("purchase")}>
-                    Buy/Sell
+                    Buy contract
                 </button>
                 <button className='login' onClick={() => navigate("history")}>
                     Statement
@@ -26,7 +26,7 @@ const NavBar = ({ setToken }) => {
                             setToken("");
                         }}
                     >
-                        <b>LOGOUT</b>
+                        <b>Logout</b>
                     </button>
                 )}
             </div>

@@ -105,3 +105,8 @@ select {
     font-size: 0.8rem;
     color: #fa3939;
 }
+
+.processing {
+    text-align: center;
+    color: white;
+}
