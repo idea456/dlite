@@ -35,6 +35,9 @@ jobs:
           new_version=$(json -f ./package.json version)
           npm install -g json@latest
           
+          if [ $(git ls-remote origin "$head") ]; then
+            git push origin -d "$head"
+          fi
           git checkout -b "$head" develop
           npm version major
           
