@@ -57,12 +57,12 @@ module.exports = {
         new webpack.ProvidePlugin({
             React: "react",
         }),
-        new PreloadWebpackPlugin({
-            rel: "preload",
-            as(entry) {
-                if (/\.css$/.test(entry)) return "style";
-            },
-        }),
+        // new PreloadWebpackPlugin({
+        //     rel: "preload",
+        //     as(entry) {
+        //         if (/\.css$/.test(entry)) return "style";
+        //     },
+        // }),
     ],
     devServer: {
         host: "localhost",
@@ -79,7 +79,7 @@ module.exports = {
         },
     },
     optimization: {
-        minimize: true,
+        minimize: false,
         // https://github.com/privatenumber/minification-benchmarks
         // minimizer: [new ESBuildMinifyPlugin({ css: true })],
         minimizer: [
