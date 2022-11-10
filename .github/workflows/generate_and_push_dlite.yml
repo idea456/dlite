@@ -29,7 +29,12 @@ jobs:
           
           old_version=$(json -f ./package.json version)
           
-          git checkout dlite/"$old_version"
+          head="dlite/$new_version"
+          if [ $(git ls-remote origin "$head") ]; then
+            git push origin -d "$head"
+          else
+            git checkout -b "$head"
+          fi
           npm version major
           new_version=$(json -f ./package.json version)
           
