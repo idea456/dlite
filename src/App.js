@@ -1,6 +1,6 @@
 import React from "react";
 import Purchase from "./components/purchase/purchase";
-import History from "./components/history/history";
+import History from "./components/History/history";
 import api from "./api";
 import "./styles/index.css";
 

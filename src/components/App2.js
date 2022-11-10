@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import History from "./History";
+import History from "./History/history";
 import api from "../api";
 import "../styles/index.css";
 
