@@ -1,13 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { attachHandlers } from "../../utils/handlers";
-import Loading from "../loading/loading";
-import Loadable from "react-loadable";
-import(/* webpackPreload: true */ "./history.css");
-
-const LazyHistoryRow = Loadable({
-    loader: () => import("./history-row"),
-    loading: Loading,
-});
+import React from "react";
 
 const HistoryRow = React.memo(({ currency, statement }) => {
     const purchase_time = new Date(statement.purchase_time * 1000);
@@ -83,65 +74,4 @@ const HistoryRow = React.memo(({ currency, statement }) => {
     );
 });
 
-const History = () => {
-    const [historyData, setHistoryData] = useState([]);
-    const [currency, setCurrency] = useState(0);
-    const [loading, setLoading] = useState(true);
-
-    const messageHandler = (message) => {
-        switch (message.msg_type) {
-            case "get_account_status":
-                console.log("we got account status");
-                if (message?.authorize)
-                    setCurrency(message?.authorize?.currency);
-                break;
-            case "statement":
-                console.log("we got statement");
-                if (message?.statement)
-                    setHistoryData(message?.statement?.transactions);
-                break;
-            default:
-                break;
-        }
-    };
-
-    useEffect(() => {
-        attachHandlers(
-            [
-                {
-                    get_account_status: 1,
-                },
-                {
-                    statement: 1,
-                    description: 1,
-                    limit: 100,
-                },
-            ],
-            ["get_account_status", "statement"],
-            messageHandler,
-            setLoading,
-        );
-    }, []);
-
-    return (
-        <div className='history'>
-            {!loading ? (
-                <div className='history__cards'>
-                    {historyData.map((statement, key) => {
-                        return (
-                            <LazyHistoryRow
-                                currency={currency}
-                                statement={statement}
-                                key={key}
-                            />
-                        );
-                    })}
-                </div>
-            ) : (
-                <Loading />
-            )}
-        </div>
-    );
-};
-
-export default History;
+export default HistoryRow;

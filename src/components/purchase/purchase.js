@@ -27,6 +27,7 @@ const Purchase = () => {
     const [callPut, setCallPut] = useState([]);
     const [BuyPrice, setBuyPrice] = useState("");
     const [balance, setBalance] = useState(0);
+    const [isProcessing, setIsProcesing] = useState(false);
 
     useEffect(() => {
         if (api.readyState === WebSocket.OPEN) {
@@ -158,6 +159,7 @@ const Purchase = () => {
                             limit: 1,
                         }),
                     );
+                    setIsProcesing(false);
                 }
                 break;
             case "sell":
@@ -198,6 +200,7 @@ const Purchase = () => {
     };
 
     const BuySell = (button_type) => {
+        setIsProcesing(true);
         const contract_type = button_type === "buy" ? callPut[0] : callPut[1];
 
         const duration = contract_type?.min_contract_duration.replace(
@@ -368,6 +371,7 @@ const Purchase = () => {
                     Down
                 </button>
             </div>
+            {console.log("isproc", isProcessing)}
             {BuyPrice && (
                 <div className='bg-white v-center rounded p-2 bordered'>
                     <h2
@@ -377,6 +381,7 @@ const Purchase = () => {
                     >{`Contract Brought at ${BuyPrice}`}</h2>
                 </div>
             )}
+            {isProcessing && <h2 className='processing'>Buying contract...</h2>}
         </div>
     );
 };

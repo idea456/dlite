@@ -81,13 +81,13 @@ module.exports = {
     optimization: {
         minimize: true,
         // https://github.com/privatenumber/minification-benchmarks
-        // minimizer: [new ESBuildMinifyPlugin({ css: true })],
-        minimizer: [
-            new TerserPlugin({
-                minify: TerserPlugin.swcMinify,
-                terserOptions: {},
-            }),
-        ],
+        minimizer: [new ESBuildMinifyPlugin({ css: true })],
+        // minimizer: [
+        //     new TerserPlugin({
+        //         minify: TerserPlugin.swcMinify,
+        //         terserOptions: {},
+        //     }),
+        // ],
         splitChunks: {
             chunks: "all",
             minSize: 0, // overrides webpack's minimum 30kb file size during splitting
