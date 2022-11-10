@@ -5,13 +5,15 @@ const BundleAnalyzerPlugin =
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
+const PreloadWebpackPlugin = require("@vue/preload-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const port = process.env.PORT || 3000;
 
 module.exports = {
     mode: "development",
     entry: "./src/index.js",
     output: {
-        filename: "[name].[hash].js",
+        filename: "[name].[contenthash].js",
     },
     devtool: "inline-source-map",
     module: {
@@ -49,16 +51,25 @@ module.exports = {
             template: "public/index.html",
         }),
         new CompressionPlugin(),
-        new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "[name].[contenthash].css", // contenthash for long-term caching
+        }),
         new webpack.ProvidePlugin({
             React: "react",
         }),
+        // new PreloadWebpackPlugin({
+        //     rel: "preload",
+        //     as(entry) {
+        //         if (/\.css$/.test(entry)) return "style";
+        //     },
+        // }),
     ],
     devServer: {
         host: "localhost",
         port: port,
         historyApiFallback: true,
         open: true,
+        hot: true,
         static: "./dist",
     },
     resolve: {
@@ -68,11 +79,14 @@ module.exports = {
         },
     },
     optimization: {
-        minimize: true,
+        minimize: false,
         // https://github.com/privatenumber/minification-benchmarks
+        // minimizer: [new ESBuildMinifyPlugin({ css: true })],
         minimizer: [
-            // new UglifyJsPlugin(),
-            new ESBuildMinifyPlugin({ css: true }),
+            new TerserPlugin({
+                minify: TerserPlugin.swcMinify,
+                terserOptions: {},
+            }),
         ],
         splitChunks: {
             chunks: "all",
