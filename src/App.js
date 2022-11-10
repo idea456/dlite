@@ -73,7 +73,7 @@ const App = () => {
     }
 
     return (
-        <RouterContext.Provider value={{ navigate }}>
+        <RouterContext.Provider value={{ navigate }} className='app'>
             <NavBar setToken={setToken} />
             {page === "history" && <LazyHistory />}
             {page === "purchase" && <LazyPurchase />}

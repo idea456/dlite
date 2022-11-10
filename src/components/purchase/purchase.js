@@ -1,9 +1,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import api from "../../api";
-import { useRouter } from "../../App";
-import(/* webpackPreload: true */ "../../styles/index.css");
-import(/* webpackPreload: true */ "./purchase.css");
+import "../../styles/index.css";
+import "./purchase.css";
 
 const colors = {
     black: "#ffffff",
@@ -18,26 +17,24 @@ const Purchase = () => {
     const [activeMarket, setActiveMarket] = useState("");
     const [tick, setTick] = useState({});
     const [subscriptionId, setSubscriptionId] = useState("");
-    const [color, setColor] = useState("black");
+    const [color, setColor] = useState("white");
     const [error, setError] = useState("");
-    const [isPurchase, setPurchase] = React.useState(false);
-    const [ProposalId, setProposalId] = React.useState("");
-    const [ContractTypes, setContractTypes] = React.useState([]);
-    const [contractId, setContractId] = React.useState("");
+    const [isPurchase, setPurchase] = useState(false);
+    const [ProposalId, setProposalId] = useState("");
+    const [ContractTypes, setContractTypes] = useState([]);
     const [tradeTypes, setTradeTypes] = useState([]);
     const [tradeType, setTradeType] = useState("");
     const [callPut, setCallPut] = useState([]);
-    const [BuyPrice, setBuyPrice] = React.useState("");
-
-    const { navigate } = useRouter();
+    const [BuyPrice, setBuyPrice] = useState("");
+    const [balance, setBalance] = useState(0);
 
     useEffect(() => {
-        api.addEventListener("message", onMessage);
         if (api.readyState === WebSocket.OPEN) {
             onOpen();
         } else {
             api.addEventListener("open", onOpen);
         }
+        api.addEventListener("message", onMessage);
     }, []);
 
     useEffect(() => {
@@ -65,6 +62,17 @@ const Purchase = () => {
     useEffect(() => {
         setError("");
     }, [activeMarket, activeSymbol]);
+
+    useEffect(() => {
+        if (ProposalId !== "") {
+            api.send(
+                JSON.stringify({
+                    buy: ProposalId,
+                    price: 5,
+                }),
+            );
+        }
+    }, [ProposalId]);
 
     const onMessage = (msg) => {
         const data = JSON.parse(msg.data);
@@ -132,9 +140,7 @@ const Purchase = () => {
                     setError(message);
                     return;
                 }
-                if (data?.proposal?.id) {
-                    setProposalId(data.proposal?.id);
-                }
+                setProposalId(data?.proposal?.id);
                 break;
             case "buy":
                 console.log(data);
@@ -145,6 +151,13 @@ const Purchase = () => {
                     return;
                 } else {
                     setBuyPrice(data.buy?.buy_price);
+                    api.send(
+                        JSON.stringify({
+                            statement: 1,
+                            description: 1,
+                            limit: 1,
+                        }),
+                    );
                 }
                 break;
             case "sell":
@@ -155,15 +168,12 @@ const Purchase = () => {
                     setError(message);
                     return;
                 } else {
-                    setBuyPrice(data.buy?.buy_price);
+                    setBuyPrice(data.sell?.buy_price);
                 }
                 break;
-            case "portfolio":
-                console.log(data?.portfolio?.contracts[0]?.contract_id);
-                setContractId(data?.portfolio?.contracts[0]?.contract_id);
-                break;
-            case "authorize":
-                console.log(data);
+            case "statement":
+                setBalance(data?.statement?.transactions[0]?.balance_after);
+                console.log(data?.statement?.transactions[0]?.balance_after);
                 break;
             default:
                 return;
@@ -177,82 +187,55 @@ const Purchase = () => {
                 product_type: "basic",
             }),
         );
+
+        api.send(
+            JSON.stringify({
+                statement: 1,
+                description: 1,
+                limit: 1,
+            }),
+        );
     };
 
     const BuySell = (button_type) => {
-        if (button_type === "buy") {
-            const duration = ContractTypes[0]?.min_contract_duration.replace(
-                /\D/g,
-                "",
-            );
-            const duration_unit =
-                ContractTypes[0]?.min_contract_duration.replace(
-                    /[^A-Za-z]/g,
-                    "",
-                );
+        const contract_type = button_type === "buy" ? callPut[0] : callPut[1];
 
-            console.log(duration, duration_unit);
+        const duration = contract_type?.min_contract_duration.replace(
+            /\D/g,
+            "",
+        );
+        const duration_unit = contract_type?.min_contract_duration.replace(
+            /[^A-Za-z]/g,
+            "",
+        );
+
+        if (tradeType === "Multiply Up/Multiply Down") {
+            const multiplier = contract_type?.multiplier_range[0];
             api.send(
                 JSON.stringify({
                     proposal: 1,
                     amount: 5,
-                    barrier: ContractTypes[0]?.barrier,
-                    basis: "payout",
-                    contract_type: ContractTypes[0]?.contract_type,
+                    basis: "stake",
+                    contract_type: contract_type?.contract_type,
+                    currency: "USD",
+                    symbol: activeSymbol,
+                    multiplier,
+                }),
+            );
+        } else {
+            api.send(
+                JSON.stringify({
+                    proposal: 1,
+                    amount: 5,
+                    barrier: contract_type?.barrier,
+                    basis: "stake",
+                    contract_type: contract_type?.contract_type,
                     currency: "USD",
                     duration: duration === "0" ? 5 : duration,
                     duration_unit: duration_unit === "" ? "t" : duration_unit,
                     symbol: activeSymbol,
                 }),
             );
-
-            setTimeout(() => {
-                api.send(
-                    JSON.stringify({
-                        buy: ProposalId,
-                        price: 5,
-                    }),
-                );
-            }, 5000);
-        } else {
-            api.send(
-                JSON.stringify({
-                    proposal: 1,
-                    amount: 5,
-                    barrier: ContractTypes[1]?.barrier,
-                    basis: "payout",
-                    contract_type: ContractTypes[1]?.contract_type,
-                    currency: "USD",
-                    duration: ContractTypes[1]?.min_contract_duration.replace(
-                        /\D/g,
-                        "",
-                    ),
-                    duration_unit:
-                        ContractTypes[1]?.min_contract_duration.replace(
-                            /[^A-Za-z]/g,
-                            "",
-                        ),
-                    symbol: activeSymbol,
-                }),
-            );
-
-            setTimeout(
-                api.send(
-                    JSON.stringify({
-                        portfolio: 1,
-                    }),
-                ),
-                1000,
-            );
-
-            setTimeout(() => {
-                api.send(
-                    JSON.stringify({
-                        sell: contractId,
-                        price: 5,
-                    }),
-                );
-            }, 5000);
         }
     };
 
@@ -277,8 +260,11 @@ const Purchase = () => {
         symbols.length &&
         (symbols.filter((sym) => sym.market === activeMarket) || []);
 
+    console.log(callPut);
     return (
         <div className='container'>
+            <h2 className='user-balance'>$ {balance}</h2>
+            <h2 className='title'>DLite</h2>
             <div>
                 <select
                     onChange={({ target: { value } }) => setActiveMarket(value)}
@@ -349,9 +335,7 @@ const Purchase = () => {
             </div>
             <div></div>
             <div className='bg-white v-center rounded p-2 bordered'>
-                <h2 style={{ color: "white" }}>
-                    {tick && Number(tick.quote || 0)}
-                </h2>
+                <h2 style={{ color }}>{tick && Number(tick.quote || 0)}</h2>
             </div>
             {!activeSymbol && !error && (
                 <span className='txt-special-grey'>
