@@ -14,7 +14,7 @@ const Index = ({ historyData, currency, setHistoryData, setCurrency }) => {
           get_account_status: 1,
         })
       );
-    }, 500);
+    }, 1000);
     setTimeout(() => {
       api.send(
         JSON.stringify({
@@ -28,7 +28,7 @@ const Index = ({ historyData, currency, setHistoryData, setCurrency }) => {
 
   return (
     <div className="history">
-      {historyData ? (
+      {historyData.length > 0 ? (
         <div className="history__cards">
           {historyData.map((statement, key) => {
             const purchase_time = new Date(statement.purchase_time * 1000);
@@ -104,7 +104,7 @@ const Index = ({ historyData, currency, setHistoryData, setCurrency }) => {
           })}
         </div>
       ) : (
-        <div className="loading">Loading...</div>
+        <Loading />
       )}
     </div>
   )
