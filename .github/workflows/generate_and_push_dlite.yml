@@ -1,4 +1,4 @@
-name: Generate and push Dlite
+name: Bump to major version and push Dlite
 on:
   workflow_dispatch:
 
@@ -20,6 +20,7 @@ jobs:
       - name: Setup build
         id: step2
         run: |
+          npm install
           npm run build
       - name: Bump version
         id: step3
@@ -29,7 +30,7 @@ jobs:
           old_version=$(json -f ./package.json version)
           
           git checkout dlite/"$old_version"
-          npm version patch
+          npm version major
           new_version=$(json -f ./package.json version)
           
       - name: Create PR
@@ -38,12 +39,13 @@ jobs:
           git config --global user.name ${{ secrets.GITHUB_USERNAME }}
           git config --global user.email ${{ secrets.GITHUB_EMAIL }}
           
-          git commit -a -m "feat: bump from version $old_version to $new_version."
+          git add .
+          git commit -m "feat: bump from version $old_version to $new_version."
           pr_body=$(git diff HEAD..main)
           
           sudo apt install gh
           gh auth login --with-token <<< ${{ github.token }}
-          gh pr create --title "Bump Dlite from $old_version to $new_version" --body "diff ${pr_body:0:5000} \`\`\`" --base "main" --head "develop"
+          gh pr create --title "Bump Dlite from $old_version to $new_version" --body "\`\`\`diff ${pr_body:0:5000} \`\`\`" --base "main" --head "develop"
 
           
           
