@@ -1,4 +1,5 @@
 name: Bump to major version and push Dlite
+
 on:
   workflow_dispatch:
 
@@ -23,8 +24,7 @@ jobs:
           git config --global user.email ${{ secrets.GH_EMAIL }}
           npm install -g json@latest
           
-          old_version=$(json -f ./package.json version)
-          
+          old_version=$(json -f ./package.json version)    
           head="dlite/$old_version"
           if [ $(git ls-remote origin "$head") ]; then
             git push origin -d "$head"
@@ -33,7 +33,6 @@ jobs:
           git checkout -b "$head" develop
           npm version major
           new_version=$(json -f ./package.json version)
-          npm install -g json@latest
           
           git commit -a -m "feat: Bump version from $old_version to $new_version." --allow-empty -f
           git push origin "$head"
@@ -41,10 +40,3 @@ jobs:
           sudo apt install gh
           gh auth login --with-token <<< ${{ github.token }}
           gh pr create --title "Bump dlite from $old_version to $new_version" --body "" --base "main" --head "$head"
-
-          
-          
-      
-          
-        
-    
